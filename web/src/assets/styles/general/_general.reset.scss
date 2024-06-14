@@ -1,0 +1,52 @@
+// Reset styles
+
+body {
+  margin: 0;
+}
+
+blockquote, dd, dl, figure, h1, h2, h3, h4, h5, h6, hr, p, pre {
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+input,
+textarea {
+  font-family: $font-2;
+  font-size: 14px;
+  color: $color-black;
+
+  resize: none;
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+  }
+
+}

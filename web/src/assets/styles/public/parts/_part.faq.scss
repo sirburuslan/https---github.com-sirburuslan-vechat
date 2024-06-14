@@ -1,0 +1,76 @@
+// FAQ PART
+.vc-faq {
+  .vc-faq-container {
+    margin: auto;
+    height: auto;
+
+    h2 {
+      text-align: center;
+      font-family: $font-8;
+      font-size: 22px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    ul {
+      margin: 9vh auto 0;
+      width: 60%;
+
+      @media (max-width: 720px) {
+        width: fit-content;
+      }
+
+      @media (max-height: 850px) {
+        margin: 60px auto 0;
+      }
+
+      li {
+        margin-bottom: 20px;
+        border-radius: 12px;
+        background-color: #ffffff;
+
+        a {
+          display: flex;
+          justify-content: space-between;
+          padding: 17px 15px;
+          line-height: 29px;
+          font-family: $font-8;
+          font-size: 15px;
+          font-weight: 500;
+          color: $color-black-dark;
+
+            .material-symbols-outlined {
+              margin-top: 0;
+              line-height: 29px;
+              transition: all 0.3s ease-in-out;
+            }
+
+        }
+
+        .vc-faq-answer {
+          overflow: hidden;
+          max-height: 0;
+          transition: all 0.3s ease-in-out;
+
+          p {
+            padding: 0 15px 15px;
+            line-height: 25px;
+            font-family: $font-8;
+            font-size: 14px;
+            font-weight: 400;
+            color: $color-black-dark;
+          }
+        }
+
+        a[aria-expanded='true'] > .material-symbols-outlined {
+          margin-top: -4px;
+          transform: rotate(-180deg);
+        }
+
+        a[aria-expanded='true'] + .vc-faq-answer {
+          max-height: 500px;
+        }
+      }
+    }
+  }
+}

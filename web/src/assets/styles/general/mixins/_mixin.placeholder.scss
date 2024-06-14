@@ -1,0 +1,14 @@
+// PLACEHOLDER MIXINS
+@mixin fc-mixin-placeholder($color: initial) {
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+
+  &:-moz-placeholder {
+    color: $color;
+  }
+
+  &::-ms-input-placeholder {
+    color: $color;
+  }
+}

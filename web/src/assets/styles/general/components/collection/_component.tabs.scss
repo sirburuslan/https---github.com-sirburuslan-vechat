@@ -1,0 +1,10 @@
+// TABS COMPONENT
+.vc-tabs {
+  .vc-tab {
+    display: none;
+
+    &.vc-show-tab {
+      display: block;
+    }
+  }
+}

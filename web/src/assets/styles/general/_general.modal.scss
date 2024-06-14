@@ -1,0 +1,249 @@
+// GENERAL STYLES
+body:has(.vc-modal-show) {
+  overflow: hidden;
+}
+
+// GENERAL MODAL
+.vc-modal {
+  position: relative;
+
+  &.vc-modal-show,
+  &.vc-modal-hide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .transition-opacity {
+    z-index: 11;
+  }
+
+  .vc-modal-container {
+    transform: scaleY(0);
+    transform-origin: top;
+    position: fixed;
+    top: 50px;
+    z-index: 12;
+    margin: auto;
+    border-radius: 8px;
+    background-color: #ffffff;
+
+    .vc-modal-header {
+      padding: 12px 15px 10px;
+      min-height: 40px;
+      //border-bottom: 1px solid rgba($color-violet, 0.2);
+
+      h3 {
+        line-height: 23px;
+        font-size: 15px;
+        font-weight: 500;
+        color: $color-violet-dark;
+      }
+
+      .vc-modal-hide-modal {
+        height: 24px;
+
+        & > * {
+          font-size: 22px;
+          color: $color-black-light;
+          transform: scale(0.9);
+          transition: transform 0.1s ease-in-out;
+          pointer-events: none;
+        }
+
+        &:hover {
+          & > * {
+            transform: scale(1);
+          }
+        }
+      }
+    }
+
+    .vc-modal-body {
+      padding: 15px;
+      min-height: 40px;
+
+      .vc-modal-button {
+        margin-top: 10px;
+
+        button {
+          display: inline-flex;
+          margin: 0;
+          padding: 0 20px;
+          min-width: 130px;
+          height: 40px;
+          border-radius: 6px;
+          line-height: 40px;
+          font-family: $font-2;
+          font-size: 13px;
+          background-color: $color-blue;
+          color: #ffffff;
+
+          & > .vc-load-more-icon,
+          & > .vc-next-icon {
+            vertical-align: middle;
+            line-height: 38px;
+            font-size: 18px;
+          }
+
+          & > .vc-load-more-icon {
+            display: none;
+          }
+
+          &.vc-active-button {
+            & > .vc-next-icon {
+              display: none;
+            }
+
+            & > .vc-load-more-icon {
+              display: inherit;
+              animation: 2s fc-rotate-icon-animation-next infinite linear;
+            }
+          }
+
+          &.vc-option-violet-btn {
+            background-color: rgba($color-violet, 1);
+
+            &:hover {
+              background-color: rgba($color-violet, 0.7);
+            }
+          }
+
+          &.vc-option-red-btn {
+            background-color: rgba($color-red, 1);
+
+            &:hover {
+              background-color: rgba($color-red, 0.7);
+            }
+          }
+
+          &.vc-confirmation-button {
+            margin-top: 20px;
+            min-width: 110px;
+          }
+        }
+      }
+
+      .vc-modal-text {
+        line-height: 25px;
+        font-size: 14px;
+        color: $color-black;
+      }
+
+      .vc-modal-text-input {
+        margin-bottom: 15px;
+        position: relative;
+        padding: 15px 15px 15px;
+        border-radius: 4px;
+        background-color: rgba($color-violet, 0.1);
+
+        label {
+          margin-top: -29px;
+          margin-left: 10px;
+          font-family: $font-2;
+          font-size: 13px;
+          background-color: transparent;
+
+          & > * {
+            width: 20px;
+            height: 20px;
+            font-size: 19px;
+            color: $color-violet;
+          }
+        }
+
+        input {
+          padding: 5px 15px 5px 40px;
+          height: 38px;
+          border: 0;
+          border: 1px solid $color-violet-light;
+          border-radius: 6px;
+          font-size: 13px;
+          font-weight: 400;
+          background-color: #ffffff;
+          color: $color-black-light;
+          box-shadow: 0 0 0 30px #ffffff inset !important;
+
+          &:focus,
+          &:active {
+            border-bottom: 1px solid $color-violet;
+          }
+        }
+      }
+
+      .vc-modal-form-input-error-message {
+        overflow: hidden;
+        margin: 0;
+        padding: 0 12px;
+        width: 100%;
+        height: 0;
+        min-height: 0;
+        border-radius: 3px;
+        line-height: 24px;
+        font-family: $font-2;
+        font-size: 13px;
+        background-color: rgba($color-red-dark, 0.2);
+        color: $color-violet-dark;
+        transition: all 0.3s linear;
+      }
+
+      .vc-modal-form-input-error-message:not(:empty) {
+        margin: 5px 0 0;
+        padding: 3px 12px;
+        min-height: 31px;
+      }
+    }
+  }
+
+  &.vc-modal-show {
+    .vc-modal-container {
+      animation: fc-modal-show 0.2s linear forwards;
+    }
+  }
+
+  &.vc-modal-hide {
+    .vc-modal-container {
+      animation: fc-modal-hide 0.2s linear forwards;
+    }
+  }
+
+  &.vc-modal-lg {
+    .vc-modal-container {
+      right: auto;
+      left: auto;
+      margin-left: -50px;
+      width: 700px;
+      max-width: 80%;
+    }
+  }
+
+  &.vc-modal-md {
+    .vc-modal-container {
+      right: auto;
+      left: auto;
+      margin-left: -50px;
+      width: 500px;
+      max-width: 80%;
+    }
+  }
+}
+
+@keyframes fc-modal-show {
+  0% {
+    transform: scaleY(0);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fc-modal-hide {
+  0% {
+    transform: scaleY(1);
+  }
+
+  100% {
+    transform: scaleY(0);
+  }
+}
