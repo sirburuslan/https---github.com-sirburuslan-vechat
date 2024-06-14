@@ -5,7 +5,14 @@ body:has(.vc-modal-show) {
 
 // GENERAL MODAL
 .vc-modal {
-  position: relative;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 999;
+  overflow: auto;
+  padding: 50px 0;
 
   &.vc-modal-show,
   &.vc-modal-hide {
@@ -21,10 +28,10 @@ body:has(.vc-modal-show) {
   .vc-modal-container {
     transform: scaleY(0);
     transform-origin: top;
-    position: fixed;
+    position: absolute;
+    z-index: 14;
     top: 50px;
-    z-index: 12;
-    margin: auto;
+    margin: 0 auto 0;
     border-radius: 8px;
     background-color: #ffffff;
 
@@ -70,7 +77,7 @@ body:has(.vc-modal-show) {
           display: inline-flex;
           margin: 0;
           padding: 0 20px;
-          min-width: 130px;
+          min-width: 150px;
           height: 40px;
           border-radius: 6px;
           line-height: 40px;

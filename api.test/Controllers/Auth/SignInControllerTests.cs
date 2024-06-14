@@ -9,6 +9,8 @@
  */
 
 // System Namespaces
+using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,8 +18,9 @@ using Microsoft.Extensions.Options;
 using Moq;
 // App Namespaces
 using api.Controllers.Auth;
-using api.Models.Dtos.Auth.Members;
+using api.Models.Dtos.Auth.Users;
 using api.Options;
+using api.Services.Interfaces.Users;
 using Xunit;
 
 // Namespace for Controllers
@@ -44,16 +47,33 @@ public class SignInControllerTests
         // Create a mock for AppSettings
         Mock<IOptions<AppSettings>> appSettingsMock = new();
 
+        // Create a mock for the interface IUserRepository
+        Mock<IUsersRepository> usersRepositoryMock = new();
+
         // Init the controller with using the Mock Object
-        SignInController controller = new(appSettingsMock.Object);
+        SignInController controller = new(appSettingsMock.Object, usersRepositoryMock.Object);
 
         // Send Request
         JsonResult? result = await controller.SignIn(signInDto) as JsonResult;
 
-        // Process the response
-        Assert.NotNull(result);
-        Assert.False((bool)result.Value.GetType().GetProperty("success").GetValue(result.Value));
-        Assert.NotNull(result.Value.GetType().GetProperty("message").GetValue(result.Value));
+        if (result is JsonResult jsonResult)
+        {
+
+            // Process the response
+            Assert.NotNull(result);
+            Assert.NotNull(result.Value);
+            Assert.NotNull(result.Value.GetType());
+            Assert.NotNull(result.Value.GetType().GetProperty("success"));
+            Assert.NotNull(result.Value.GetType().GetProperty("success")!.GetValue(result.Value));
+            Assert.True((bool)result.Value.GetType().GetProperty("success")!.GetValue(result.Value)!);
+            Assert.Equal("User signin successfully", result.Value.GetType().GetProperty("message")!.GetValue(result.Value));
+
+        }
+        else
+        {
+            // It is not a JsonResult
+            Assert.Fail("Test failed because is not correct result.");
+        }
 
     }
 }

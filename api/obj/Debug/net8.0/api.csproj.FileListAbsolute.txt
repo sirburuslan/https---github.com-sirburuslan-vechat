@@ -111,3 +111,4 @@ C:\Users\sirbu\OneDrive\Works\vechat\api\bin\Debug\net8.0\System.Security.Permis
 C:\Users\sirbu\OneDrive\Works\vechat\api\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\sirbu\OneDrive\Works\vechat\api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\sirbu\OneDrive\Works\vechat\api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\sirbu\OneDrive\Works\vechat\api\obj\Debug\net8.0\api.sourcelink.json

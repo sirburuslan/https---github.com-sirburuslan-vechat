@@ -17,9 +17,9 @@ using Moq;
 // App Namespaces
 using api.Controllers.Auth;
 using api.Models.Dtos;
-using api.Models.Dtos.Auth.Members;
+using api.Models.Dtos.Auth.Users;
 using api.Options;
-using api.Services.Interfaces.Members;
+using api.Services.Interfaces.Users;
 using Xunit;
 
 
@@ -48,21 +48,21 @@ public class RegistrationControllerTests
         };
 
         // Create a test response
-        ResponseDto<MemberDto> createMemberResponse = new()
+        ResponseDto<UserDto> createUserResponse = new()
         {
-            Result = new MemberDto(),
-            Message = "Member created successfully"
+            Result = new UserDto(),
+            Message = "User created successfully"
         };
 
-        // Create a mock for the interface IMemberRepository
-        Mock<IMembersRepository> membersRepositoryMock = new();
+        // Create a mock for the interface IUserRepository
+        Mock<IUsersRepository> usersRepositoryMock = new();
 
-        // Create a simulation for the method CreateMemberAsync with predefined parameters
-        membersRepositoryMock.Setup(repo => repo.CreateMemberAsync(registrationDto))
-                                .ReturnsAsync(createMemberResponse);
+        // Create a simulation for the method RegisterUserAsync with predefined parameters
+        usersRepositoryMock.Setup(repo => repo.RegisterUserAsync(registrationDto))
+                                .ReturnsAsync(createUserResponse);
 
         // Lets instantiate the controller
-        RegistrationController controller = new(membersRepositoryMock.Object);
+        RegistrationController controller = new(usersRepositoryMock.Object);
 
         // Send Request
         JsonResult? result = await controller.SignUp(registrationDto) as JsonResult;
@@ -78,7 +78,7 @@ public class RegistrationControllerTests
             Assert.NotNull(result.Value.GetType().GetProperty("success"));
             Assert.NotNull(result.Value.GetType().GetProperty("success")!.GetValue(result.Value));
             Assert.True((bool)result.Value.GetType().GetProperty("success")!.GetValue(result.Value)!);
-            Assert.Equal("Member created successfully", result.Value.GetType().GetProperty("message")!.GetValue(result.Value));
+            Assert.Equal("User created successfully", result.Value.GetType().GetProperty("message")!.GetValue(result.Value));
 
         }
         else
@@ -101,21 +101,21 @@ public class RegistrationControllerTests
         RegistrationDto registrationDto = new(); ;
 
         // Create a test response
-        ResponseDto<MemberDto> createMemberResponse = new()
+        ResponseDto<UserDto> createUserResponse = new()
         {
             Result = null,
             Message = "Registration Failed"
         };
 
-        // Create a mock for the interface IMemberRepository
-        Mock<IMembersRepository> membersRepositoryMock = new();
+        // Create a mock for the interface IUserRepository
+        Mock<IUsersRepository> usersRepositoryMock = new();
 
-        // Create a simulation for the method CreateMemberAsync with predefined parameters
-        membersRepositoryMock.Setup(repo => repo.CreateMemberAsync(registrationDto))
-                                .ReturnsAsync(createMemberResponse);
+        // Create a simulation for the method RegisterUserAsync with predefined parameters
+        usersRepositoryMock.Setup(repo => repo.RegisterUserAsync(registrationDto))
+                                .ReturnsAsync(createUserResponse);
 
         // Lets instantiate the controller
-        RegistrationController controller = new(membersRepositoryMock.Object);
+        RegistrationController controller = new(usersRepositoryMock.Object);
 
         // Send Request
         JsonResult? result = await controller.SignUp(registrationDto) as JsonResult;

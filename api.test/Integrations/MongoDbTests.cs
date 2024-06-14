@@ -28,7 +28,7 @@ public class MongoDbTests
     /// Test Mongo Db database
     /// </summary>
     [Fact]
-    public async Task TestDb()
+    public void TestDb()
     {
 
         // Arrange
