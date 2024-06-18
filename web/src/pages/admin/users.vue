@@ -141,11 +141,6 @@ onMounted(() => {
   }
 });
 
-const paginationData = reactive({
-  page: computed(() => usersStore.page),
-  total: computed(() => usersStore.total)
-});
-
 </script>
 <template>
 <div class="vc-users-container">
@@ -323,11 +318,10 @@ const paginationData = reactive({
           </div>
       </div>
       <Pagination
-        v-if="paginationData.total"
-        scope="users"
-        :total="20"
-        :page="paginationData.page"
-        :limit="2"
+        v-if="total"
+        :total="total"
+        :page="page"
+        :limit="24"
         @update:page="usersStore.setCurrentPage"
       />
   </div>

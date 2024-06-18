@@ -2,10 +2,6 @@
 
 // Allowed properties
 const props = defineProps({
-    scope: {
-        type: String,
-        required: true
-    },
     page: {
         type: Number,
         required: true
@@ -21,16 +17,9 @@ const props = defineProps({
 });
 
 // Get properties
-const scope = toRef(props, 'scope');
 const page = toRef(props, 'page');
 const limit = toRef(props, 'limit');
 const total = toRef(props, 'total');
-
-// Count pages
-const totalPages: number = Math.ceil(total.value / limit.value) + 1;
-
-// Calculate start page
-const from: number = page.value > 2 ? page.value - 2 : 1;
 
 // Create an array with pages
 const pages = computed<number[]>(() => {
@@ -70,7 +59,7 @@ const navigateTo = (page: number) => {
         <h3>
             {{ (((page - 1) * limit) + 1) + '-' + (((page * limit) < total)?(page * limit):total) }} {{ $t('of') }} {{ total}} {{ $t('results') }}
         </h3>
-        <ul class="flex" :data-scope="scope">
+        <ul class="flex">
             <li class="page-item" v-if="page > 1">
                 <NuxtLink href="#" class="page-link" @click.prevent="navigateTo(page - 1)" external>
                     <Icon name="navigate_before" />
