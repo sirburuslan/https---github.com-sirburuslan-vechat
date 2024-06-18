@@ -129,7 +129,7 @@ public class SettingsController(ISettingsRepository settingsRepository, IUsersRe
             if (token is not null)
             {
                 // Get the user's ID
-                string userId = new Tokens().GetTokenData(token ?? string.Empty, "UserId");
+                string userId = Tokens.GetTokenData(token ?? string.Empty, "UserId");
 
                 // Verify if the user id exists
                 if (userId != "")

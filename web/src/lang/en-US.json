@@ -272,5 +272,11 @@
   "first_name_too_short": "First name too short.",
   "first_name_too_long": "First name too long.",
   "last_name_too_short": "Last name too short.",
-  "last_name_too_long": "Last name too long."
+  "last_name_too_long": "Last name too long.",
+  "time_ago": "ago",
+  "just_now": "just now",
+  "minutes": "minutes",
+  "hours": "hours",
+  "days": "days",
+  "unknown": "never"
 }

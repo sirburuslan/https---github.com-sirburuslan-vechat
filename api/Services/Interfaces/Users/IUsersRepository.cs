@@ -59,6 +59,13 @@ public interface IUsersRepository
     Task<ResponseDto<UserDto>> SignIn(SignInDto signInDto);
 
     /// <summary>
+    /// Gets all users
+    /// </summary>
+    /// <param name="searchDto">Search parameters</param>
+    /// <returns>List with users</returns>
+    Task<ResponseDto<ElementsDto<UserDto>>> GetUsersAsync(SearchDto searchDto);
+
+    /// <summary>
     /// Get user data
     /// </summary>
     /// <param name="userId">User ID</param>

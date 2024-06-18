@@ -13,8 +13,8 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
-// Namespace for Controllers
-namespace Api.Test.Controllers;
+// Namespace for Integrations
+namespace Api.Test.Integrations;
 
 /// <summary>
 /// Interface for TestRepository
@@ -52,7 +52,7 @@ public class TestRepository : ITestRepository
     /// <exception cref="ArgumentNullException">If collection missing</exception>
     public TestRepository(IMongoCollection<DataEntity> collection)
     {
-        _collection = collection ?? throw new ArgumentNullException(nameof(collection));
+        _collection = collection;
     }
 
     /// <summary>

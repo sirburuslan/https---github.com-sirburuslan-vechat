@@ -5,7 +5,13 @@ import { ref } from 'vue';
 // Installed Utils
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
-import { required, email, minLength, maxLength, helpers } from '@vuelidate/validators';
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  helpers
+} from '@vuelidate/validators';
 
 // Get i18n functions
 const { t } = useI18n();
@@ -16,10 +22,10 @@ useHead({
 });
 
 // Get the show notification plugin
-const { $showNotification } = useNuxtApp();  
+const { $showNotification } = useNuxtApp();
 
-// Get use users composable
-const { createUser, successMessage, errorMessage } = useUsers();
+// Gets the users store
+const usersStore = useUsersStore();
 
 // Modal status
 const showModal = ref(false);
@@ -100,29 +106,45 @@ const handleSubmit = async () => {
   }
 
   // Create new user
-  await createUser(state);
+  const response = await usersStore.createUser(state);
 
-  // Check if success message exists
-  if (successMessage.value) {
-    // Show success notification
-    $showNotification('success', successMessage.value);
-    // Reset the state
-    Object.assign(state, {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
-    });
-    v$.value.$reset();
-  }  
-
-  // Check if error message exists
-  if (errorMessage.value) {
+  // Check if the response is success
+  if (response.success) {
+      // Show success notification
+      $showNotification('success', sanitizeInput(response.message));
+      // Reset the state
+      Object.assign(state, {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: ''
+      });
+      v$.value.$reset();
+  } else {
     // Show error notification
-    $showNotification('error', errorMessage.value);
+    $showNotification('error', response.message?sanitizeInput(response.message):t('an_error_has_occurred'));
   }
 
 }
+
+// Get the data from the users store
+const users = computed(() => usersStore.users);
+const page = computed(() => usersStore.page);
+const total = computed(() => usersStore.total);
+const search = computed(() => usersStore.search);
+const time = computed(() => usersStore.time);
+
+// Run code when the component is mounted
+onMounted(() => {
+  if ( users != null ) {
+    usersStore.getUsers(page.value, search.value);
+  }
+});
+
+const paginationData = reactive({
+  page: computed(() => usersStore.page),
+  total: computed(() => usersStore.total)
+});
 
 </script>
 <template>
@@ -254,24 +276,11 @@ const handleSubmit = async () => {
               </form>
             </Modal>
           </div>
-          <div class="w-full vc-users-list">
-            <div class="vc-no-users-found">
-              <p>{{ $t('new_users_were_found') }}</p>
-            </div>
-          </div>
-          <!--<div class="w-full grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 vc-users-list" *ngIf="usersList && usersList.length > 0; else noResults">
-            <div class="vc-user" *ngFor="let user of usersList" >
+          <div class="w-full grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 vc-users-list" v-if="users">
+            <div class="vc-user" v-for="user of users">
               <div class="vc-dashboard-sidebar-body flex justify-between">
                 <div class="flex">
                   <div class="grid grid-cols-1 content-around vc-user-photo">
-                    {(user.profilePhoto as string)?(
-                    <Image src={user.profilePhoto} width={40} height={40} alt="User Photo" onError={(e:
-                      SyntheticEvent<HTMLImageElement, Event>): void => {e.currentTarget.src = '/assets/img/cover.png'}} />
-                      ): (
-                      <div class="vc-profile-photo-cover">
-                        {getIcon('IconPerson')}
-                      </div>
-                      )}
                       <div class="vc-profile-photo-cover">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
@@ -281,51 +290,45 @@ const handleSubmit = async () => {
                   <div class="grid grid-cols-1 content-around vc-user-info">
                     <h3>
                       <a href="#">
-                        {{ (user.first_name && user.last_name)?user.first_name + ' ' + user.last_name:user.email }}
+                        {{ (user.firstName && user.lastName)?user.firstName + ' ' + user.lastName:user.email }}
                       </a>
                     </h3>
                     <p>
-                      {(parseInt(user.role) === 0)?(getWord('default', 'default_administrator',
-                      userOptions['Language'])):(getWord('default', 'default_user', userOptions['Language']))}
+                      {{(parseInt(user.role) === 0)?t('administrator'):t('user')}}
                     </p>
                   </div>
                 </div>
                 <div class="grid grid-cols-1 content-around">
-                  <app-dropdown
-                  [buttonText]="dropdownButton"
-                  [dropdownItems]="
-                    [
-                      {
-                        type: 'link',
-                        text: 'edit' | translate,
-                        url: '/admin/users/' + user.id
-                      },
-                      {
-                        type: 'callback',
-                        text: 'delete' | translate,
-                        callback: user.id
-                      }
-                    ]
-                  "
-                  (callbackValue)="deleteConfirmation($event)"></app-dropdown>
                 </div>
               </div>
               <div class="grid grid-cols-1 content-around vc-user-footer">
                 <div class="flex justify-between">
                   <div>
-                    <app-icon
-                      [iconName]="'person_add_alt'"
-                      [extraClass]="'vc-user-last-access-icon'"
-                    ></app-icon>
+                    <Icon
+                      name="person_add_alt"
+                      extraClass="vc-user-last-access-icon"
+                    />
                     <span>
-                      {{ formatDate(user.date_joined) }}
+                      {{ calculateTime(user.created, time) }}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>-->
+          </div>
+          <div class="w-full vc-users-list" v-else>
+            <div class="vc-no-users-found">
+              <p>{{ $t('new_users_were_found') }}</p>
+            </div>
+          </div>
       </div>
-      <!--<app-navigation [scope]="'users'" [total]="users.total" [page]="users.page" [limit]="24" (navigate)="navigateTo($event)"></app-navigation>-->
+      <Pagination
+        v-if="paginationData.total"
+        scope="users"
+        :total="20"
+        :page="paginationData.page"
+        :limit="2"
+        @update:page="usersStore.setCurrentPage"
+      />
   </div>
 </template>

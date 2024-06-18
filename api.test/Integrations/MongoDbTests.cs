@@ -8,15 +8,12 @@
  * This class contains the methods used for mongo db testing
  */
 
-// System Utils
-
 // Installed Utils
 using MongoDB.Driver;
-using Moq;
 using Xunit;
 
-// Namespace for Controllers
-namespace Api.Test.Controllers;
+// Namespace for Integrations
+namespace Api.Test.Integrations;
 
 /// <summary>
 /// MongoDbTests Class
@@ -31,8 +28,18 @@ public class MongoDbTests
     public void TestDb()
     {
 
+        /*
+           GET MONGODB CONNECTION WITH ITS DEPENDENCIES
+        */
+
         // Arrange
         using var fixture = new MongoDbFixture();
+
+
+
+        /*
+           SAVE DATA IN A COLLECTION
+        */
 
         // Get the repository
         TestRepository repository = fixture.GetRepository();
@@ -47,6 +54,14 @@ public class MongoDbTests
         // Act
         repository.InsertData(entity);
 
+
+
+
+        /*
+           TEST READ DATA FROM A COLLECTION
+        */
+
+
         // Find data
         var firstResult = fixture._collection.FindSync(Builders<DataEntity>.Filter.Empty).SingleOrDefault();
 
@@ -55,6 +70,13 @@ public class MongoDbTests
 
         // Test if is the saved data
         Assert.Equal("Test Value", firstResult.DataValue);
+
+
+
+        /*
+           TEST DELETE DATA FROM A COLLECTION
+        */
+        
 
         // Delete data
         repository.DeleteData("Test Name");

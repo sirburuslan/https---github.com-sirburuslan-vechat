@@ -33,6 +33,139 @@ namespace api.Repositories.Users.Account;
 /// <param name="logger">Logger instance</param>
 public class ReadRepository(MongoDb db, IMemoryCache memoryCache, ILogger logger)
 {
+
+    /// <summary>
+    /// Gets all users
+    /// </summary>
+    /// <param name="searchDto">Search parameters</param>
+    /// <returns>List with users</returns>
+    public async Task<ResponseDto<ElementsDto<UserDto>>> GetUsersAsync(SearchDto searchDto) {
+
+        try {
+
+            // Prepare the page
+            int page = (searchDto.Page > 0)?searchDto.Page:1;
+
+            // Prepare the total results
+            const int total = 24;
+
+            // Split the keys
+            string[] searchKeys = searchDto.Search!.Split(' ') ?? [];
+
+            // Create the cache key
+            string cacheKey = "vc_users_" + string.Join("_", searchKeys) + '_' + searchDto.Page;
+
+            // Verify if the cache is saved
+            if ( !memoryCache.TryGetValue(cacheKey, out Tuple<List<UserDto>, long>? usersResponse ) ) {
+
+                // Create a filter to search users
+                FilterDefinitionBuilder<UserEntity> filterBuilder = Builders<UserEntity>.Filter;
+
+                // Initialize the combined filter
+                FilterDefinition<UserEntity> combinedFilter;
+
+                if (searchKeys.Length == 0 || searchKeys.All(string.IsNullOrWhiteSpace)) {
+                    Console.WriteLine("Nothing");
+                    // If no search keys no filters
+                    combinedFilter = filterBuilder.Empty;
+
+                } else {
+                    Console.WriteLine("All");
+                    // Container for filters
+                    var filters = new List<FilterDefinition<UserEntity>>();
+                    
+                    // Apply filtering based on searchKeys
+                    foreach (string key in searchKeys) {
+
+                        // Set where parameters
+                        var keyFilter = filterBuilder.Or(
+                            filterBuilder.Regex(u => u.FirstName, new BsonRegularExpression(key, "i")),
+                            filterBuilder.Regex(u => u.LastName, new BsonRegularExpression(key, "i")),
+                            filterBuilder.Regex(u => u.LastName, new BsonRegularExpression(key, "i"))
+                        );
+
+                        // Add key filter to the list
+                        filters.Add(keyFilter);
+
+                    }
+
+                    // Combine the filters
+                    combinedFilter = filterBuilder.And(filters);
+
+                }
+
+                // Apply the filters
+                var sort = Builders<UserEntity>.Sort.Descending(u => u.UserId);
+
+                // Total count of matched documents
+                long totalCount = await db.Users.CountDocumentsAsync(combinedFilter);
+
+                // Paginated and sorted results
+                List<UserDto> users = await db.Users.Find(combinedFilter)
+                                            .Project(u => new UserDto {
+                                                UserId = u.UserId,
+                                                FirstName = u.FirstName,
+                                                LastName = u.LastName,
+                                                Email = u.Email,
+                                                Role = u.Role,
+                                                Created = u.Created
+                                            })
+                                            .Sort(sort)
+                                            .Skip((page - 1) * total)
+                                            .Limit(total)
+                                            .ToListAsync();
+
+                // Add data to user response
+                usersResponse = new Tuple<List<UserDto>, long>(users, totalCount);
+
+                // Create the cache options for storing
+                MemoryCacheEntryOptions cacheOptions = new() {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+                };
+
+                // Save the request in the cache
+                //_memoryCache.Set(cacheKey, usersResponse, cacheOptions);
+
+                // Save the cache key in the group
+                //new Cache(_memoryCache).Save("users", cacheKey);
+
+            }
+
+            // Verify if users exists
+            if ( usersResponse?.Item1.Count > 0 ) {
+
+                // Return the response
+                return new ResponseDto<ElementsDto<UserDto>> {
+                    Result = new ElementsDto<UserDto> {
+                        Elements = usersResponse.Item1,
+                        Total = usersResponse.Item2,
+                        Page = searchDto.Page
+                    },
+                    Message = null
+                };
+
+            } else {
+
+                // Return the response
+                return new ResponseDto<ElementsDto<UserDto>> {
+                    Result = null,
+                    Message = Words.Get("NoUsersFound")
+                };
+
+            }
+
+        } catch ( InvalidOperationException e ) {
+
+            // Return the response
+            return new ResponseDto<ElementsDto<UserDto>> {
+                Result = null,
+                Message = e.Message
+            };                
+
+        }
+
+    }
+
     /// <summary>
     /// Get user data by User ID
     /// </summary>
@@ -51,18 +184,15 @@ public class ReadRepository(MongoDb db, IMemoryCache memoryCache, ILogger logger
                 // Create a definition to search for user by user id
                 FilterDefinition<UserEntity> filterDefinition = Builders<UserEntity>.Filter.Eq(m => m.UserId, userId);
 
-                // Apply the definition filter to the read query
-                var userData = await db.Users.Find(filterDefinition).Project(m => new UserDto
-                {
-                    UserId = m.UserId,
-                    FirstName = m.FirstName,
-                    LastName = m.LastName,
-                    Email = m.Email,
-                    Role = m.Role
-                }).FirstOrDefaultAsync();
-
                 // Add user data to user
-                user = userData;
+                user = await db.Users.Find(filterDefinition).Project(u => new UserDto
+                {
+                    UserId = u.UserId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    Role = u.Role
+                }).FirstOrDefaultAsync();
 
                 // Create the options for cache storing
                 MemoryCacheEntryOptions cacheOptions = new()

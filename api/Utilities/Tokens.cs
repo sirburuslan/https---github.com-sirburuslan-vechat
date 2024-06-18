@@ -17,7 +17,7 @@ namespace api.Utilities;
 /// <summary>
 /// This class provides some methods to works with the Jwt tokens
 /// </summary>
-public class Tokens
+public static class Tokens
 {
     /// <summary>
     /// Get token data by claim field
@@ -25,7 +25,7 @@ public class Tokens
     /// <param name="accessToken">Access token</param>
     /// <param name="field">Token field</param>
     /// <returns>string with field's data</returns>
-    public string GetTokenData(string accessToken, string field)
+    public static string GetTokenData(string accessToken, string field)
     {
         // Default response
         var response = string.Empty;

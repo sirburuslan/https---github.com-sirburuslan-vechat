@@ -9,29 +9,26 @@
  */
 
 // System Utils
-using System.Reflection;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 // App Utils
 using api.Models.Dtos;
 using api.Models.Dtos.Administrator.Users;
-using api.Models.Entities.Users;
 using api.Services.Interfaces.Users;
-using api.Utilities;
 using api.Utilities.Attributes;
 
-// Namespace for Users Administrator Controller
+// Namespace for Users Administrator Controllers
 namespace api.Controllers.Administrator.Users;
 
 /// <summary>
-/// Initializes a new instance of the <see cref="UpdateController"/> class.
+/// Initializes a new instance of the <see cref="CreateController"/> class.
 /// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/admin/users")]
 [AdministratorAccess]
-public class UpdateController(IUsersRepository usersRepository) : ControllerBase
+public class CreateController(IUsersRepository usersRepository) : ControllerBase
 {
 
     /// <summary>

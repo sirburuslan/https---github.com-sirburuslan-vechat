@@ -16,4 +16,5 @@ export interface User {
   email: string;   
   token?: string;
   sidebarStatus: number;
+  created: number;
 }

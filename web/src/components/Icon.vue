@@ -16,7 +16,6 @@ const props = defineProps({
 const { name, extraClass } = props
 
 </script>
-
 <template>
   <span :class="['material-symbols-outlined', extraClass ? ' ' + extraClass : '']">
     {{ name }}

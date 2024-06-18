@@ -111,6 +111,21 @@ public class UsersRepository(IMemoryCache memoryCache, MongoDb db, IPasswordHash
     }
 
     /// <summary>
+    /// Gets all users
+    /// </summary>
+    /// <param name="searchDto">Search parameters</param>
+    /// <returns>List with users</returns>
+    public async Task<ResponseDto<ElementsDto<UserDto>>> GetUsersAsync(SearchDto searchDto) {
+
+        // Init Read Repository
+        ReadRepository readRepository = new(db, memoryCache, logger);
+
+        // Search for users
+        return await readRepository.GetUsersAsync(searchDto);
+
+    }
+
+    /// <summary>
     /// Get user data
     /// </summary>
     /// <param name="userId">User ID</param>

@@ -3,7 +3,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import { describe, vi, test, expect, beforeEach } from 'vitest';
 
 // App Utils
-import type User from '~/interfaces/user';
+import type { User } from '~/interfaces/user';
 
 describe('User Store', () => {
   const userStore = useUserStore();
@@ -22,7 +22,7 @@ describe('User Store', () => {
 
   test('it should save the data correctly', () => {
     const userData: User = {
-      userId: '1',
+      userId: 1,
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -49,7 +49,7 @@ describe('User Store', () => {
 
   test('should update sidebar status correctly', () => {
     userStore.saveUser({
-      userId: '1',
+      userId: 1,
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',

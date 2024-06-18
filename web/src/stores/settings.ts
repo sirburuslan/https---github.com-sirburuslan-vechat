@@ -6,7 +6,7 @@ import { defineStore } from 'pinia';
 
 // App Utils
 import type ApiResponse from '~/interfaces/apiResponse';
-import type User from '~/interfaces/user';
+import type { User } from '~/interfaces/user';
 import type Settings from '~/interfaces/settings';
 import { useUserStore } from './user';
 
@@ -19,7 +19,7 @@ export const useSettingsStore = defineStore('settings', {
     optionsList: (state) => state.options,
   },
   actions: {
-    getOptions: async function (path: string) {
+    async getOptions(path: string) {
       const config = useRuntimeConfig();
       const router = useRouter();
       try {
@@ -34,7 +34,6 @@ export const useSettingsStore = defineStore('settings', {
           }
           if (typeof settings.user !== 'undefined') {
             const userStore = useUserStore();
-            //settings.user.token = useCookie('jwtToken').value ?? '';
             userStore.saveUser(settings.user);
             if (path.startsWith('/auth/')) {
               if (settings.user.role < 1) {
