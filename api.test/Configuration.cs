@@ -1,3 +1,13 @@
+/*
+ * @class Configuration
+ *
+ * @author Ruslan Sirbu
+ * @version 0.0.1
+ * @updated 2024-06-20
+ *
+ * This class contains the some information used for configuration
+ */
+
 // Main Namespace
 namespace Api.Test;
 

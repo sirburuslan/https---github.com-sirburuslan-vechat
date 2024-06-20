@@ -1,6 +1,0 @@
-
-2024-05-01 15:52:14.129 +03:00 [INF] [null]
-2024-05-01 15:52:54.104 +03:00 [INF] [null]
-2024-05-01 15:59:47.742 +03:00 [INF] exampleValue
-2024-05-01 16:05:24.770 +03:00 [INF] C:\Users\sirbu\OneDrive\Works\nuchat\api.test\bin\Debug\net8.0
-2024-05-01 16:06:56.701 +03:00 [INF] C:\Users\sirbu\OneDrive\Works\nuchat\api.test\bin\Debug

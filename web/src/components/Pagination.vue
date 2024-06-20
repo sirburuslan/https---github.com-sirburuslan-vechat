@@ -29,7 +29,7 @@ const pages = computed<number[]>(() => {
 
   // Calculate start and end page numbers
   let startPage = Math.max(page.value - 2, 1);
-  let endPage = Math.min(startPage + 4, totalPages);
+  const endPage = Math.min(startPage + 4, totalPages);
 
   // Adjust startPage if we're at the end of the page range
   if (endPage === totalPages) {
