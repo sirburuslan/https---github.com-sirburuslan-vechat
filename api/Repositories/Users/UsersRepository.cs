@@ -41,7 +41,6 @@ public class UsersRepository(IMemoryCache memoryCache, MongoDb db, IPasswordHash
     /// Register a user
     /// </summary>
     /// <param name="registrationDto">User dto with the user's data</param>
-    /// <returns>Response with user data</returns>
     public async Task<ResponseDto<UserDto>> RegisterUserAsync(RegistrationDto registrationDto)
     {
         // Init Auth Repository
@@ -50,6 +49,7 @@ public class UsersRepository(IMemoryCache memoryCache, MongoDb db, IPasswordHash
         // Register user and return the response
         return await authRepository.RegisterUserAsync(registrationDto);
     }
+
     /// <summary>
     /// Create a user
     /// </summary>
@@ -101,13 +101,13 @@ public class UsersRepository(IMemoryCache memoryCache, MongoDb db, IPasswordHash
     /// </summary>
     /// <param name="signInDto">User dto with the user's data</param>
     /// <returns>Response with user data</returns>
-    public async Task<ResponseDto<UserDto>> SignIn(SignInDto signInDto)
+    public async Task<ResponseDto<UserDto>> SignInAsync(SignInDto signInDto)
     {
         // Init Auth Repository
         AuthRepository authRepository = new(memoryCache, db, passwordHasher, logger);
 
         // Authentificate user and return the response
-        return await authRepository.SignIn(signInDto);
+        return await authRepository.SignInAsync(signInDto);
     }
 
     /// <summary>

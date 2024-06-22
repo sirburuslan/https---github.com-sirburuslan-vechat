@@ -3,7 +3,7 @@
  *
  * @author Ruslan Sirbu
  * @version 0.0.1
- * @updated 2024-04-15
+ * @updated 2024-06-21
  *
  * This class contains the methods used for email sign in testing
  */
@@ -34,20 +34,16 @@ namespace Api.Test.Controllers.Auth;
 /// </summary>
 public class SignInControllerTests
 {
-    private readonly Mock<IOptions<AppSettings>> _mockOptions;
-    private readonly Mock<IUsersRepository> _mockUsersRepository;
+    // Mock for website settings
+    private readonly Mock<IOptions<AppSettings>> _mockOptions = new Mock<IOptions<AppSettings>>();
 
-    public SignInControllerTests()
-    {
-
-        // Create a mock for the App Settings
-        _mockOptions = new Mock<IOptions<AppSettings>>();
-
-        // Create a mock for the Users Repository
-        _mockUsersRepository = new Mock<IUsersRepository>();
-
-    }
+    // Mock for the users repository
+    private readonly Mock<IUsersRepository> _mockUsersRepository = new Mock<IUsersRepository>();
     
+    /// <summary>
+    /// Mock for Response
+    /// </summary>
+    /// <param name="isSuccessful">A boolean mark for the response</param>
     private ResponseDto<UserDto> GetMockUserResponse(bool isSuccessful)
     {
 
@@ -67,6 +63,9 @@ public class SignInControllerTests
 
     }
 
+    /// <summary>
+    /// App's Configuration
+    /// </summary>
     private void SetupMockOptions()
     {
 
@@ -104,6 +103,9 @@ public class SignInControllerTests
 
     }
 
+    /// <summary>
+    /// Test Success Login
+    /// </summary>
     [Fact]
     public async Task SignIn_ValidCredentials_ReturnsSuccessResponse()
     {
@@ -115,7 +117,7 @@ public class SignInControllerTests
         var mockUserResponse = GetMockUserResponse(true);
 
         // Add login dto and respponse
-        _mockUsersRepository.Setup(r => r.SignIn(It.IsAny<SignInDto>())).ReturnsAsync(mockUserResponse);
+        _mockUsersRepository.Setup(r => r.SignInAsync(It.IsAny<SignInDto>())).ReturnsAsync(mockUserResponse);
 
         // Add mock to the controller
         SignInController controller = new(_mockOptions.Object, _mockUsersRepository.Object);
@@ -149,6 +151,9 @@ public class SignInControllerTests
 
     }
 
+    /// <summary>
+    /// Test Fail Login
+    /// </summary>
     [Fact]
     public async Task SignIn_InvalidCredentials_ReturnsErrorResponse()
     {
@@ -160,7 +165,7 @@ public class SignInControllerTests
         var mockUserResponse = GetMockUserResponse(false);
 
         // Add login dto and respponse
-        _mockUsersRepository.Setup(r => r.SignIn(It.IsAny<SignInDto>())).ReturnsAsync(mockUserResponse);
+        _mockUsersRepository.Setup(r => r.SignInAsync(It.IsAny<SignInDto>())).ReturnsAsync(mockUserResponse);
 
         // Add mock to the controller
         SignInController controller = new(_mockOptions.Object, _mockUsersRepository.Object);

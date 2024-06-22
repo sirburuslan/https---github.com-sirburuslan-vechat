@@ -110,7 +110,7 @@ public class AuthRepository(IMemoryCache memoryCache, MongoDb db, IPasswordHashe
     /// </summary>
     /// <param name="signInDto">User dto with the user's data</param>
     /// <returns>Response with user data</returns>
-    public async Task<ResponseDto<UserDto>> SignIn(SignInDto signInDto)
+    public async Task<ResponseDto<UserDto>> SignInAsync(SignInDto signInDto)
     {
         // Lets verify first if email and password exists
         if (signInDto.Email == null || signInDto.Password == null)

@@ -23,7 +23,7 @@ useHead({
 const config = useRuntimeConfig();
 
 // Get the site's name
-const siteName = config.publicsiteName ?? '';
+const siteName = config.public.siteName ?? '';
 
 // Create a reactive value for password input
 const passwordInput = ref('password');
@@ -103,7 +103,6 @@ const handleSubmit = async () => {
   }
 };
 </script>
-
 <template>
   <form
     @submit.prevent="handleSubmit"

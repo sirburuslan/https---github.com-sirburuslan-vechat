@@ -294,6 +294,7 @@ onMounted(() => {
                   </div>
                 </div>
                 <div class="grid grid-cols-1 content-around">
+                  
                 </div>
               </div>
               <div class="grid grid-cols-1 content-around vc-user-footer">

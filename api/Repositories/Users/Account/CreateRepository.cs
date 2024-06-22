@@ -16,7 +16,6 @@ using MongoDB.Driver;
 // App Utils
 using api.Models.Dtos;
 using api.Models.Dtos.Administrator.Users;
-using api.Models.Dtos.Auth.Users;
 using api.Models.Entities.Users;
 using api.Utilities;
 using api.Utilities.Db;
@@ -74,7 +73,7 @@ public class CreateRepository(IMemoryCache memoryCache, MongoDb db, IPasswordHas
             userEntity.Password = passwordHasher.HashPassword(userEntity, newUserDto.Password ?? string.Empty);
 
             // Set the user's role
-            userEntity.Role = newUserDto.Role;
+            userEntity.Role = 1;
 
             // Set the joined time
             userEntity.Created = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();

@@ -48,7 +48,7 @@ public class SignInController(IOptions<AppSettings> options, IUsersRepository us
     public async Task<IActionResult> SignIn([FromBody] SignInDto signInDto)
     {
         // Checks if the user data is correct
-        ResponseDto<UserDto> user = await usersRepository.SignIn(signInDto);
+        ResponseDto<UserDto> user = await usersRepository.SignInAsync(signInDto);
 
         // Verify if the login is not successfully
         if (user.Result == null)

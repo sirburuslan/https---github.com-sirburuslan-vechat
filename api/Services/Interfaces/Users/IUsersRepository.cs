@@ -56,7 +56,7 @@ public interface IUsersRepository
     /// </summary>
     /// <param name="signInDto">User dto with the user's data</param>
     /// <returns>Response with user data</returns>
-    Task<ResponseDto<UserDto>> SignIn(SignInDto signInDto);
+    Task<ResponseDto<UserDto>> SignInAsync(SignInDto signInDto);
 
     /// <summary>
     /// Gets all users

@@ -61,6 +61,10 @@ export const useRegister = () => {
       if (response.success) {
         // Set Message
         successMessage.value = sanitizeInput(response.message);
+        // Set a pause
+        setTimeout(async () => {
+          await navigateTo('/auth/signin');
+        }, 2000);
       } else {
         // Set Message
         errorMessage.value = sanitizeInput(response.message);
