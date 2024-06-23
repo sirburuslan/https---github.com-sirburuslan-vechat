@@ -73,7 +73,7 @@ export const useUsersStore = defineStore('users', {
             try {
 
                 // Get the users
-                const users: ElementsResponse<User[]> = await $fetch(config.public.apiUrl + `api/v1.0/admin/users/list?page=${page}&search=${search}`)
+                const users: ElementsResponse<User[]> = await $fetch(config.public.apiUrl + `api/v1.0/admin/users/list?page=${page}&search=${search}`);
                 
                 // Verify if users exists
                 if ( users.success ) {
@@ -97,7 +97,7 @@ export const useUsersStore = defineStore('users', {
 
         setCurrentPage(page: number) {
             this.page = page;
-        }
+        }      
 
     }
 

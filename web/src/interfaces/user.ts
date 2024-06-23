@@ -9,7 +9,7 @@ export interface CreateUser extends BaseUser {
 }
 
 export interface User {
-  userId: number;
+  userId: string;
   role: number;
   firstName: string;
   lastName: string;

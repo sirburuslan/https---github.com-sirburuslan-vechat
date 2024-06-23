@@ -65,7 +65,6 @@ public class ReadRepository(MongoDb db, IMemoryCache memoryCache, ILogger logger
                 FilterDefinition<UserEntity> combinedFilter;
 
                 if (searchKeys.Length == 0 || searchKeys.All(string.IsNullOrWhiteSpace)) {
-                    Console.WriteLine("Nothing");
                     // If no search keys no filters
                     combinedFilter = filterBuilder.Empty;
 

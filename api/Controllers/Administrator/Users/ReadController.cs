@@ -52,7 +52,7 @@ public class ReadController(IUsersRepository usersRepository): ControllerBase {
 
         // Verify if users exists
         if ( usersList.Result != null ) {
-
+Console.WriteLine("MemberId: " + usersList.Result.Elements[0].UserId);
             // Return users response
             return new JsonResult(new {
                 success = true,
